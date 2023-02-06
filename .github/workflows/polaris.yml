@@ -1,0 +1,50 @@
+name: Polaris
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      # Set up JDK 11 in runtime environment
+      ##- name: Set up JDK 11
+        ##uses: actions/setup-java@v3.0.0
+        ##with:
+        ##  java-version: '11'
+        ##  distribution: 'adopt'
+          
+      - name: Synopsys Action
+        uses: synopsys-sig/synopsys-action@1.0.0
+        with:
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: ${GITHUB_REPOSITORY}
+          polaris_project_name: "U_test"
+          polaris_assessment_types: "[\"SCA\", \"SAST\"]"
+
+          # Optional parameter to specify path to synopsys bridge.
+          # This can be used if you want to pre-configure your GitHub Runner with the
+          # Synopsys Bridge software
+          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
+          ##synopsys_bridge_path: "/path_to_bridge_executable"
+
+          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
+          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
+          # of your runner. For example in this case, we are using the latest version for Linux.
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+        env:
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+          ##MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
+          ##WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
