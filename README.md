@@ -1,7 +1,6 @@
 # Polaris
 tag: roller_4.0
 
-with v.1.0.0 of https://github.com/marketplace/actions/synopsys-action
 
 ## with v.1.0.0 of https://github.com/marketplace/actions/synopsys-action
 name: Synopsys Security Testing
