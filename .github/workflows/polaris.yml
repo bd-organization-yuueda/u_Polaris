@@ -32,7 +32,7 @@ jobs:
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "U_test"
           polaris_project_name: ${{ github.event.repository.name }}
-          polaris_assessment_types: "[\"SCA\"]"
+          polaris_assessment_types: "[\"SCA\", \"SAST\"]"
 
           # Optional parameter to specify path to synopsys bridge.
           # This can be used if you want to pre-configure your GitHub Runner with the
