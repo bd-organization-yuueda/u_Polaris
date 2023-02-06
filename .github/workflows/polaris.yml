@@ -26,7 +26,7 @@ jobs:
         ##  distribution: 'adopt'
           
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@1.0.0
+        uses: synopsys-sig/synopsys-action@v1.0.0
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
