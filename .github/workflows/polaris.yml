@@ -30,7 +30,7 @@ jobs:
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "ueda-yu-${{ github.repository }}"
+          polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: "U_test"
           polaris_assessment_types: "[\"SCA\", \"SAST\"]"
 
