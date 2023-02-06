@@ -2,3 +2,4 @@ capture:
   build:
     clean-command: mvn -B clean install
     build-command: mvn -DskipTests=true -V -ntp install
+    #
