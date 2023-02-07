@@ -1,5 +1,5 @@
 ## Synopsys GitHub Action - Polaris　
-v.1.0.0   https://github.com/synopsys-sig/synopsys-action#synopsys-github-action---polaris
+## v.1.0.0   https://github.com/synopsys-sig/synopsys-action#synopsys-github-action---polaris
 
 Before you can run a pipeline using the Synopsys Action and Polaris, you must make sure the appropriate
 applications, projects and entitlements are set in your Polaris environment.
