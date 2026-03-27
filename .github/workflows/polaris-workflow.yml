@@ -40,7 +40,7 @@ jobs:
           polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
           ### Project's parameters
           polaris_application_name: ${{ github.event.repository.name }}
-          polaris_project_name: ${{ github.ref_name }}
+          polaris_project_name: ${{ github.event.repository.name }}
 
           ### SCAN CONFIGURATION: Uncomment below to enable
           # polaris_waitForScan: true # Wait for scan completion before proceeding
