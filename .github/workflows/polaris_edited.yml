@@ -1,0 +1,121 @@
+name: Polaris_SecurityScan
+
+# Not generated from Security App. Manually create the yaml file for Polaris
+on:
+  push:
+    branches: [ main, stage ]
+  pull_request:
+    branches: [ main, stage ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      # Set up JDK 11 in runtime environment
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3.0.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          
+      - name: Polaris Scan 
+        uses: blackduck-inc/black-duck-security-scan@latest
+        with:
+          ### SCANNING: Required fields
+          polaris_server_url: ${{ secrets.POLARIS_URL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          ### ASSESSMENT TYPES
+          polaris_assessment_types: SAST,SCA  # Comma-separated list: SAST,SCA,DAST
+          ### GITHUB TOKEN
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
+          ### SARIF report parameters
+          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+          polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
+          ### Project's parameters
+          polaris_application_name: U_test2
+          polaris_project_name: u_Polaris_manual  #${{ github.event.repository.name }}
+          # project_directory: ${{ vars.PROJECT_DIRECTORY }}
+          ### SCAN CONFIGURATION: Uncomment below to enable
+          # polaris_waitForScan: true # Wait for scan completion before proceeding
+          ### Mark build status if policy violating issues are found
+          # mark_build_status: failure # Set to success, failure, or skip
+          ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: false
+
+          ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
+          # polaris_reports_sarif_create: true  
+          # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
+          # polaris_reports_sarif_severities: 'CRITICAL,HIGH'
+          # polaris_reports_sarif_groupSCAIssues: true 
+          # polaris_reports_sarif_issue_types: 'SCA, SAST' 
+          # polaris_upload_sarif_report: true 
+          ### SCA configuration
+          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          detect_search_depth: 2
+          # detect_args: '--detect.diagnostic=true'
+          # detect_config_path: '/Users/Config/application.properties'
+          ### SAST Configuration
+          # coverity_build_command: mvn clean install
+          # coverity_clean_command: mvn clean
+          # coverity_config_path: /Users/Config/coverity.yml
+          # coverity_args: --config-override capture.build.build-command=mvn install
+          # coverity_version: '2025.6.2'
+          
+          ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
+          # polaris_test_sast_location: 'remote'
+          # polaris_test_sca_location: 'remote'
+          # project_source_archive: ${{ vars.PROJECT_SOURCE_ARCHIVE }}
+          # project_source_excludes: ${{ vars.PROJECT_SOURCE_EXCLUDES }} # Accepts Multiple Values
+          # project_source_preserveSymLinks: true
+          ### Uncomment this to use Local Analysis feature
+          # Please use Local Analysis or Source Upload exclusively
+          # polaris_test_sast_location: 'local'
+
+
+      - name: Polaris PR Scan
+        # id: polaris-pr-scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: blackduck-inc/black-duck-security-scan@latest
+        with:
+          ### SCANNING: Required fields
+          polaris_server_url: ${{ secrets.POLARIS_URL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          ### ASSESSMENT TYPES
+          polaris_assessment_types: SAST,SCA  # Comma-separated list: SAST,SCA,DAST
+          ### GITHUB TOKEN
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
+          polaris_prComment_enabled: true
+          ### SARIF report parameters
+          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+          polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
+          ### Project's parameters
+          polaris_application_name: U_test2
+          polaris_project_name: ${{ github.event.repository.name }}
+          # project_directory: ${{ vars.PROJECT_DIRECTORY }}
+
+          ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
+          # polaris_test_sast_location: 'remote'
+          # polaris_test_sca_location: 'remote'
+          # project_source_archive: ${{ vars.PROJECT_SOURCE_ARCHIVE }}
+          # project_source_excludes: ${{ vars.PROJECT_SOURCE_EXCLUDES }} # Accepts Multiple Values
+          # project_source_preserveSymLinks: true
+          #### Uncomment this to use Local Analysis feature
+          # Please use Local Analysis or Source Upload exclusively
+          # polaris_test_sast_location: 'local'
+
+          ### Mark build status if policy violating issues are found
+          # mark_build_status: 'success'
+          ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true
+
+         ### Uncomment below configuration to add custom logic based on return status
+         # - name: cmdLine
+         #   id: cmdLine
+         #   run: |
+         #     EXIT_CODE=${{ steps.polaris-full-scan.outputs.status }}
+         #     echo "Polarity Full Scan exit status - $EXIT_CODE"
