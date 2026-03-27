@@ -25,7 +25,7 @@ jobs:
 
       - name: Polaris Security Scan
         id: polaris-scan
-        uses: blackduck-inc/black-duck-security-scan@v2
+        uses: blackduck-inc/black-duck-security-scan@latest
         with:
           ### SCANNING: Required fields
           polaris_server_url: ${{ secrets.POLARIS_URL }}
