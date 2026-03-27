@@ -39,7 +39,7 @@ jobs:
           polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
           polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
           ### Project's parameters
-          polaris_application_name: ${{ github.event.repository.name }}
+          polaris_application_name: U_test2
           polaris_project_name: ${{ github.event.repository.name }}
 
           ### SCAN CONFIGURATION: Uncomment below to enable
