@@ -55,7 +55,7 @@ jobs:
           # polaris_reports_sarif_issue_types: 'SCA, SAST' 
           # polaris_upload_sarif_report: true 
           ### SCA configuration
-          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE or specify both SCA-PACKAG,SCA-SIGNATURE
           detect_search_depth: 2
           # detect_args: '--detect.diagnostic=true'
           # detect_config_path: '/Users/Config/application.properties'
