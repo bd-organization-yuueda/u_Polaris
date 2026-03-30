@@ -3,9 +3,9 @@ name: Polaris_SecurityScan
 # Not generated from Security App. Manually create the yaml file for Polaris
 on:
   push:
-    branches: [ main, stage ]
+    branches: [ main, develop, stage ]
   pull_request:
-    branches: [ main, stage ]
+    branches: [ main, develop, stage ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -33,9 +33,6 @@ jobs:
           polaris_assessment_types: SAST,SCA  # Comma-separated list: SAST,SCA,DAST
           ### GITHUB TOKEN
           github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
-          ### SARIF report parameters
-          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
-          polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
           ### Project's parameters
           polaris_application_name: U_test2
           polaris_project_name: u_Polaris_manual  #${{ github.event.repository.name }}
@@ -48,14 +45,15 @@ jobs:
           # include_diagnostics: false
 
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          # polaris_reports_sarif_create: true  
+          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+          polaris_upload_sarif_report: true   # Upload SARIF report in GitHub Advanced Security tab
           # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
-          # polaris_reports_sarif_severities: 'CRITICAL,HIGH'
+          polaris_reports_sarif_severities: 'CRITICAL,HIGH'
           # polaris_reports_sarif_groupSCAIssues: true 
-          # polaris_reports_sarif_issue_types: 'SCA, SAST' 
-          # polaris_upload_sarif_report: true 
+          polaris_reports_sarif_issue_types: 'SAST'  #'SCA, SAST'
+
           ### SCA configuration
-          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          polaris_test_sca_type: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
           detect_search_depth: 2
           # detect_args: '--detect.diagnostic=true'
           # detect_config_path: '/Users/Config/application.properties'
