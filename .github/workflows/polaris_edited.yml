@@ -9,6 +9,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: write               # Required to push changes or create fix branches
+  pull-requests: write          # Required to add comments or create fix pull requests
+  security-events: write        # Required to upload SARIF results to GitHub Security
+
 jobs:
   build:
     runs-on: [ubuntu-latest]
@@ -65,12 +70,11 @@ jobs:
           # coverity_version: '2025.6.2'
 
           ### Github Issues
-          # polaris_externalIssues_create: true
-          # polaris_externalIssues_types: "SCA,SAST"
-          # polaris_externalIssues_severities: "critical,high,medium"
+          polaris_externalIssues_create: true
+          polaris_externalIssues_types: "SAST"  # SCA,SAST
+          polaris_externalIssues_severities: "high" # critical,high,medium
           # polaris_externalIssues_groupSCAIssues: true
-          # polaris_externalIssues_maxCount: 10
-          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when polaris_externalIssues_create is set to 'true'
+          polaris_externalIssues_maxCount: 10
           
           ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
           # polaris_test_sast_location: 'remote'
@@ -115,7 +119,8 @@ jobs:
           # polaris_test_sast_location: 'local'
 
           ### Mark build status if policy violating issues are found
-          # mark_build_status: 'success'
+          # MARK_BUILD_STATUS: 'Success' # Default is failure
+
           ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
 
