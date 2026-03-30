@@ -53,7 +53,7 @@ jobs:
           polaris_reports_sarif_issue_types: 'SAST'  #'SCA, SAST'
 
           ### SCA configuration
-          polaris_test_sca_type: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
           detect_search_depth: 2
           # detect_args: '--detect.diagnostic=true'
           # detect_config_path: '/Users/Config/application.properties'
@@ -63,6 +63,14 @@ jobs:
           # coverity_config_path: /Users/Config/coverity.yml
           # coverity_args: --config-override capture.build.build-command=mvn install
           # coverity_version: '2025.6.2'
+
+          ### Github Issues
+          # polaris_externalIssues_create: true
+          # polaris_externalIssues_types: "SCA,SAST"
+          # polaris_externalIssues_severities: "critical,high,medium"
+          # polaris_externalIssues_groupSCAIssues: true
+          # polaris_externalIssues_maxCount: 10
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when polaris_externalIssues_create is set to 'true'
           
           ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
           # polaris_test_sast_location: 'remote'
