@@ -206,4 +206,27 @@ public class PingTargets extends UIAction {
     public void setPingTargetId(String pingTargetId) {
         this.pingTargetId = pingTargetId;
     }
+
+/** ==============================
+ TEST ONLY: XSS detection test
+ ==============================*/
+    private static final boolean ENABLE_XSS_TEST_CODE = true;
+
+    public String xssTest() {
+
+        if (!ENABLE_XSS_TEST_CODE) {
+         return LIST;
+        }
+
+        // ユーザー入力（リクエストパラメータ）をそのまま使用
+        String unsafeInput = getPingTargetId();
+        // エスケープなしでUI向けメッセージに流す（意図的）
+        addMessage("XSS Test Message: " + unsafeInput);
+        return LIST;
+    }
+
+    // TEST ONLY
+    public String getXssEcho() {
+        return getPingTargetId();
+    }
 }
