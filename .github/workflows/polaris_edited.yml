@@ -15,7 +15,7 @@ permissions:
   security-events: write        # Required to upload SARIF results to GitHub Security
 
 jobs:
-  build:
+  polaris:
     runs-on: [ubuntu-latest]
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -28,7 +28,8 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           
-      - name: Polaris Scan 
+      - name: Polaris Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
         uses: blackduck-inc/black-duck-security-scan@latest
         with:
           ### SCANNING: Required fields
@@ -58,7 +59,8 @@ jobs:
           polaris_reports_sarif_issue_types: 'SAST'  #'SCA, SAST'
 
           ### SCA configuration
-          polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          # polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
+          BRIDGE_POLARIS_TEST_SCA_TYPE: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE. こっちは両方選択可能
           detect_search_depth: 2
           # detect_args: '--detect.diagnostic=true'
           # detect_config_path: '/Users/Config/application.properties'
