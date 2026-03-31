@@ -56,7 +56,7 @@ jobs:
           # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
           polaris_reports_sarif_severities: 'CRITICAL,HIGH'
           # polaris_reports_sarif_groupSCAIssues: true 
-          polaris_reports_sarif_issue_types: 'SCA,SAST'  #'SCA, SAST'
+          polaris_reports_sarif_issue_types: 'SAST'  #'SCA,SAST'
 
           ### SCA configuration
           # polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
@@ -73,7 +73,7 @@ jobs:
 
           ### Github Issues
           polaris_externalIssues_create: true
-          polaris_externalIssues_types: "SAST"  # SCA,SAST
+          polaris_externalIssues_types: "SAST,SCA"  # SCA,SAST
           polaris_externalIssues_severities: "high" # critical,high,medium
           # polaris_externalIssues_groupSCAIssues: true
           polaris_externalIssues_maxCount: 10
