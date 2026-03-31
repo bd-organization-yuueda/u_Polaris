@@ -34,7 +34,15 @@ import org.apache.struts2.convention.annotation.AllowedMethods;
 /**
  * Admin action for managing global ping targets.
  */
-// TODO: make this work @AllowedMethods({"execute","enable","disable","delete","deleteConfirm"})
+@AllowedMethods({
+    "execute",
+    "enable",
+    "disable",
+    "delete",
+    "deleteConfirm",
+    "xssTest"
+})
+
 public class PingTargets extends UIAction {
     
     private static Log log = LogFactory.getLog(PingTargets.class);
@@ -213,11 +221,9 @@ public class PingTargets extends UIAction {
     private static final boolean ENABLE_XSS_TEST_CODE = true;
 
     public String xssTest() {
-
         if (!ENABLE_XSS_TEST_CODE) {
          return LIST;
         }
-
         // ユーザー入力（リクエストパラメータ）をそのまま使用
         String unsafeInput = getPingTargetId();
         // エスケープなしでUI向けメッセージに流す（意図的）
