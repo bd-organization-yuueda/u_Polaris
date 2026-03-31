@@ -47,8 +47,7 @@ limitations under the License.
         <eclipse-link.version>2.7.9</eclipse-link.version>
         <guice.version>5.0.1</guice.version>
         <log4j2.version>2.17.0</log4j2.version>
-        <!-- add -->
-        <slf4j.version>1.7.28</slf4j.version>
+        <!-- add <slf4j.version>1.7.28</slf4j.version> -->
         <disruptor.version>3.3.9</disruptor.version>
         <dnsjava.version>2.1.6</dnsjava.version>
         <!-- add -->
