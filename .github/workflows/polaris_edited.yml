@@ -60,7 +60,6 @@ jobs:
 
           ### SCA configuration
           # polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
-          BRIDGE_POLARIS_TEST_SCA_TYPE: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE. こっちは両方選択可能
           detect_search_depth: 2
           # detect_args: '--detect.diagnostic=true'
           # detect_config_path: '/Users/Config/application.properties'
@@ -87,7 +86,8 @@ jobs:
           ### Uncomment this to use Local Analysis feature
           # Please use Local Analysis or Source Upload exclusively
           # polaris_test_sast_location: 'local'
-
+        env: 
+          BRIDGE_POLARIS_TEST_SCA_TYPE: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE.  polaris_test_sca_typeは2つ指定できないが、こっちは両方選択可能
 
       - name: Polaris PR Scan
         # id: polaris-pr-scan
@@ -99,15 +99,13 @@ jobs:
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           ### ASSESSMENT TYPES
           polaris_assessment_types: SAST,SCA  # Comma-separated list: SAST,SCA,DAST
-          ### GITHUB TOKEN
+          ### PR SCAN CONFIGURATION
           github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
           polaris_prComment_enabled: true
-          ### SARIF report parameters
-          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
-          polaris_upload_sarif_report: true  # Upload SARIF report in GitHub Advanced Security tab
           ### Project's parameters
           polaris_application_name: U_test2
-          polaris_project_name: ${{ github.event.repository.name }}
+          polaris_project_name: u_Polaris_manual  #${{ github.event.repository.name }}
+          polaris_prComment_severities: 'CRITICAL,HIGH'  # Critical, High, Medium, Low, and Informational. Default: high,critical
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
 
           ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
