@@ -48,15 +48,15 @@ jobs:
           ### Mark build status if policy violating issues are found
           # mark_build_status: failure # Set to success, failure, or skip
           ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
-          # include_diagnostics: false
+          include_diagnostics: true
 
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          #vpolaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
-          # polaris_upload_sarif_report: true   # Upload SARIF report in GitHub Advanced Security tab
-          # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
-          # polaris_reports_sarif_severities: 'CRITICAL,HIGH'
-          # polaris_reports_sarif_groupSCAIssues: true 
-          # polaris_reports_sarif_issue_types: 'SAST'  #'SCA,SAST'
+          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+          polaris_upload_sarif_report: true   # Upload SARIF report in GitHub Advanced Security tab
+          #polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
+          polaris_reports_sarif_severities: 'CRITICAL,HIGH'
+          polaris_reports_sarif_groupSCAIssues: true 
+          polaris_reports_sarif_issue_types: 'SAST,SCA'  #'SCA,SAST'
 
           ### SCA configuration
           # polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
@@ -73,7 +73,7 @@ jobs:
           ### Github Issues
           polaris_externalIssues_create: true
           polaris_externalIssues_types: "SAST,SCA"  # SCA,SAST
-          polaris_externalIssues_severities: "HIGH" # Default:["Critical", "High"]
+          polaris_externalIssues_severities: "'CRITICAL,HIGH,MEDIUM'" # Default is 'CRITICAL,HIGH'. CRITICAL,HIGH,MEDIUM,LOW
           # polaris_externalIssues_groupSCAIssues: true  # Defaul is true
           polaris_externalIssues_maxCount: 10  # Defaul is 10
           
