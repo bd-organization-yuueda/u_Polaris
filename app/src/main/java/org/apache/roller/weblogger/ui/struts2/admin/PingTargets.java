@@ -245,31 +245,17 @@ public class PingTargets extends UIAction {
     }
     
     public String sqlInjectionTest() {
-        try {
-            // 攻撃者入力（リクエストパラメータ）
-            String unsafeId = getPingTargetId();
+        String unsafeId = getPingTargetId();
 
-            // JDBC（意図的に PreparedStatement を使わない）
-            Connection conn = DriverManager.getConnection(
-                "jdbc:h2:mem:testdb", "sa", ""
-            );
-            Statement stmt = conn.createStatement();
+        // ★ SQL Injection（文字列連結）
+        String sql =
+            "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
 
-            // ★ SQL Injection 脆弱性（CWE-89）
-            String sql = "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
-            ResultSet rs = stmt.executeQuery(sql);
+        log.info("Executing SQL: " + sql);
 
-            if (rs.next()) {
-                addMessage("Found ping target: " + rs.getString("id"));
-            }
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            log.error("SQLi test error", e);
-        }
-        return LIST;
-        }
+        addMessage("SQL executed: " + sql);
+    return LIST;
+    }
 
     public String commandInjectionTest() {
         try {
