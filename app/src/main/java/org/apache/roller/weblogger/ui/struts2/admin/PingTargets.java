@@ -18,6 +18,10 @@
 
 package org.apache.roller.weblogger.ui.struts2.admin;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +34,15 @@ import org.apache.roller.weblogger.business.pings.PingTargetManager;
 import org.apache.roller.weblogger.pojos.PingTarget;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.struts2.convention.annotation.AllowedMethods;
+
+//added
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+//added
 
 /**
  * Admin action for managing global ping targets.
@@ -216,14 +229,9 @@ public class PingTargets extends UIAction {
     }
 
 /** ==============================
- TEST ONLY: XSS detection test
+ TEST ONLY:
  ==============================*/
-    private static final boolean ENABLE_XSS_TEST_CODE = true;
-
     public String xssTest() {
-        if (!ENABLE_XSS_TEST_CODE) {
-         return LIST;
-        }
         // ユーザー入力（リクエストパラメータ）をそのまま使用
         String unsafeInput = getPingTargetId();
         // エスケープなしでUI向けメッセージに流す（意図的）
@@ -235,4 +243,55 @@ public class PingTargets extends UIAction {
     public String getXssEcho() {
         return getPingTargetId();
     }
+    
+    public String sqlInjectionTest() {
+        try {
+            // 攻撃者入力（リクエストパラメータ）
+            String unsafeId = getPingTargetId();
+
+            // JDBC（意図的に PreparedStatement を使わない）
+            Connection conn = DriverManager.getConnection(
+                "jdbc:h2:mem:testdb", "sa", ""
+            );
+            Statement stmt = conn.createStatement();
+
+            // ★ SQL Injection 脆弱性（CWE-89）
+            String sql = "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                addMessage("Found ping target: " + rs.getString("id"));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            log.error("SQLi test error", e);
+        }
+        return LIST;
+        }
+
+    public String commandInjectionTest() {
+        try {
+            // 攻撃者入力
+            String unsafeInput = getPingTargetId();
+
+            // ★ OS コマンドインジェクション
+            Process p = Runtime.getRuntime().exec(
+                "sh -c \"echo " + unsafeInput + "\""
+            );
+
+            BufferedReader reader =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                addMessage(line);
+            }
+            reader.close();
+        } catch (Exception e) {
+            log.error("Command injection test error", e);
+        }
+        return LIST;
+    }
+
 }
