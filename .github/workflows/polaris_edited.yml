@@ -51,12 +51,12 @@ jobs:
           # include_diagnostics: false
 
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          polaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
-          polaris_upload_sarif_report: true   # Upload SARIF report in GitHub Advanced Security tab
+          #vpolaris_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+          # polaris_upload_sarif_report: true   # Upload SARIF report in GitHub Advanced Security tab
           # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
-          polaris_reports_sarif_severities: 'CRITICAL,HIGH'
+          # polaris_reports_sarif_severities: 'CRITICAL,HIGH'
           # polaris_reports_sarif_groupSCAIssues: true 
-          polaris_reports_sarif_issue_types: 'SAST'  #'SCA,SAST'
+          # polaris_reports_sarif_issue_types: 'SAST'  #'SCA,SAST'
 
           ### SCA configuration
           # polaris_test_sca_type: 'SCA-SIGNATURE'   # Default is SCA-PACKAGE. You can pick either SCA-PACKAGE or SCA-SIGNATURE
@@ -73,9 +73,9 @@ jobs:
           ### Github Issues
           polaris_externalIssues_create: true
           polaris_externalIssues_types: "SAST,SCA"  # SCA,SAST
-          polaris_externalIssues_severities: "high" # critical,high,medium
-          # polaris_externalIssues_groupSCAIssues: true
-          polaris_externalIssues_maxCount: 10
+          polaris_externalIssues_severities: "HIGH" # Default:["Critical", "High"]
+          # polaris_externalIssues_groupSCAIssues: true  # Defaul is true
+          polaris_externalIssues_maxCount: 10  # Defaul is 10
           
           ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
           # polaris_test_sast_location: 'remote'
@@ -98,7 +98,7 @@ jobs:
           polaris_server_url: ${{ secrets.POLARIS_URL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           ### ASSESSMENT TYPES
-          polaris_assessment_types: SAST,SCA  # Comma-separated list: SAST,SCA,DAST
+          polaris_assessment_types: 'SAST'  # Comma-separated list: SAST,SCA,DAST
           ### PR SCAN CONFIGURATION
           github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
           polaris_prComment_enabled: true
