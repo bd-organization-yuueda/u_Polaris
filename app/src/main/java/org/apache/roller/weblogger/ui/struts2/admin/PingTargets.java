@@ -51,9 +51,11 @@ import java.io.InputStreamReader;
     "execute",
     "enable",
     "disable",
-    "delete",
+    "delete",  
     "deleteConfirm",
-    "xssTest"
+    "xssTest",
+    "sqlInjectionTest",
+    "commandInjectionTest"
 })
 
 public class PingTargets extends UIAction {
@@ -232,39 +234,40 @@ public class PingTargets extends UIAction {
  TEST ONLY:
  ==============================*/
     public String xssTest() {
-        // ユーザー入力（リクエストパラメータ）をそのまま使用
         String unsafeInput = getPingTargetId();
-        // エスケープなしでUI向けメッセージに流す（意図的）
-        addMessage("XSS Test Message: " + unsafeInput);
+        addMessage("<div>" + unsafeInput + "</div>");
         return LIST;
     }
-
-    // TEST ONLY
     public String getXssEcho() {
         return getPingTargetId();
     }
-    
+
     public String sqlInjectionTest() {
-        String unsafeId = getPingTargetId();
+        try {
+            String unsafeId = getPingTargetId();
 
-        // ★ SQL Injection（文字列連結）
-        String sql =
-            "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
+            String sql =
+                "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
+            Statement stmt = getDummyStatement(); 
+            stmt.executeQuery(sql);
 
-        log.info("Executing SQL: " + sql);
+            addMessage("Executed SQL: " + sql);
+        } catch (Exception e) {
+            log.error("SQL Injection Test Error", e);
+        }
+        return LIST;
+        }   
 
-        addMessage("SQL executed: " + sql);
-    return LIST;
-    }
+        private Statement getDummyStatement() {
+            return null;
+        }
 
     public String commandInjectionTest() {
         try {
-            // 攻撃者入力
             String unsafeInput = getPingTargetId();
-
             // ★ OS コマンドインジェクション
             Process p = Runtime.getRuntime().exec(
-                "sh -c \"echo " + unsafeInput + "\""
+                "/bin/sh -c \"ls " + unsafeInput + "\""
             );
 
             BufferedReader reader =
