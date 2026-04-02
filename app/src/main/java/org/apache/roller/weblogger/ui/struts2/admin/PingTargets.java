@@ -37,11 +37,9 @@ import org.apache.struts2.convention.annotation.AllowedMethods;
 
 //added
 import java.sql.Connection;
-import java.sql.DriverManager;
+import org.apache.struts2.ServletActionContext;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Statement;
-import java.sql.ResultSet;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 //added
 
 /**
@@ -233,6 +231,26 @@ public class PingTargets extends UIAction {
 /** ==============================
  TEST ONLY:
  ==============================*/
+    public String sqlInjectionTest() {
+        HttpServletRequest request =ServletActionContext.getRequest();
+        String unsafeId = request.getParameter("pingTargetId");
+
+        String sql =
+           "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
+
+        try {
+           Connection conn = null;
+
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(sql);
+        } catch (Exception e) {
+            log.error("SQL Injection test", e);
+        }
+
+        addMessage("Executed SQL: " + sql);
+        return LIST;
+    }
+
     public String xssTest() {
         String unsafeInput = getPingTargetId();
         addMessage("<div>" + unsafeInput + "</div>");
@@ -241,26 +259,6 @@ public class PingTargets extends UIAction {
     public String getXssEcho() {
         return getPingTargetId();
     }
-
-    public String sqlInjectionTest() {
-        try {
-            String unsafeId = getPingTargetId();
-
-            String sql =
-                "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
-            Statement stmt = getDummyStatement(); 
-            stmt.executeQuery(sql);
-
-            addMessage("Executed SQL: " + sql);
-        } catch (Exception e) {
-            log.error("SQL Injection Test Error", e);
-        }
-        return LIST;
-        }   
-
-        private Statement getDummyStatement() {
-            return null;
-        }
 
     public String commandInjectionTest() {
         try {
