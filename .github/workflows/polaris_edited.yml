@@ -17,6 +17,8 @@ permissions:
 jobs:
   polaris:
     runs-on: [ubuntu-latest]
+    env: 
+      BRIDGE_POLARIS_TEST_SCA_TYPE: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE.  polaris_test_sca_typeは2つ指定できないが、こっちは両方選択可能
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
@@ -73,8 +75,8 @@ jobs:
           ### Github Issues
           polaris_externalIssues_create: true
           polaris_externalIssues_types: "SAST,SCA"  # SCA,SAST
-          polaris_externalIssues_severities: "'CRITICAL,HIGH,MEDIUM'" # Default is 'CRITICAL,HIGH'. CRITICAL,HIGH,MEDIUM,LOW
-          # polaris_externalIssues_groupSCAIssues: true  # Defaul is true
+          polaris_externalIssues_severities: "CRITICAL,HIGH,MEDIUM" # Default is 'CRITICAL,HIGH'. CRITICAL,HIGH,MEDIUM,LOW
+          polaris_externalIssues_groupSCAIssues: true  # Defaul is true
           polaris_externalIssues_maxCount: 10  # Defaul is 10
           
           ### Uncomment this to use Source Upload method. Default value is hybrid (build based)
@@ -86,8 +88,6 @@ jobs:
           ### Uncomment this to use Local Analysis feature
           # Please use Local Analysis or Source Upload exclusively
           # polaris_test_sast_location: 'local'
-        env: 
-          BRIDGE_POLARIS_TEST_SCA_TYPE: 'SCA-PACKAGE,SCA-SIGNATURE'   # Default is SCA-PACKAGE.  polaris_test_sca_typeは2つ指定できないが、こっちは両方選択可能
 
       - name: Polaris PR Scan
         # id: polaris-pr-scan
