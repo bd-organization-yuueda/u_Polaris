@@ -75,7 +75,7 @@ jobs:
           ### Github Issues
           polaris_externalIssues_create: true
           polaris_externalIssues_types: "SAST,SCA"  # SCA,SAST
-          polaris_externalIssues_severities: "CRITICAL,HIGH,MEDIUM" # Default is 'CRITICAL,HIGH'. CRITICAL,HIGH,MEDIUM,LOW
+          polaris_externalIssues_severities: "CRITICAL,HIGH,MEDIUM,LOW" # Default is 'CRITICAL,HIGH'. CRITICAL,HIGH,MEDIUM,LOW
           polaris_externalIssues_groupSCAIssues: true  # Defaul is true
           polaris_externalIssues_maxCount: 10  # Defaul is 10
           
