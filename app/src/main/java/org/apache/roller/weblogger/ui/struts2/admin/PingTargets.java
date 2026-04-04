@@ -18,6 +18,10 @@
 
 package org.apache.roller.weblogger.ui.struts2.admin;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,10 +35,27 @@ import org.apache.roller.weblogger.pojos.PingTarget;
 import org.apache.roller.weblogger.ui.struts2.util.UIAction;
 import org.apache.struts2.convention.annotation.AllowedMethods;
 
+//added
+import java.sql.Connection;
+import org.apache.struts2.ServletActionContext;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Statement;
+//added
+
 /**
  * Admin action for managing global ping targets.
  */
-// TODO: make this work @AllowedMethods({"execute","enable","disable","delete","deleteConfirm"})
+@AllowedMethods({
+    "execute",
+    "enable",
+    "disable",
+    "delete",  
+    "deleteConfirm",
+    "xssTest",
+    "sqlInjectionTest",
+    "commandInjectionTest"
+})
+
 public class PingTargets extends UIAction {
     
     private static Log log = LogFactory.getLog(PingTargets.class);
@@ -206,4 +227,58 @@ public class PingTargets extends UIAction {
     public void setPingTargetId(String pingTargetId) {
         this.pingTargetId = pingTargetId;
     }
+
+/** ==============================
+ TEST ONLY:
+ ==============================*/
+    public String sqlInjectionTest() {
+        HttpServletRequest request =ServletActionContext.getRequest();
+        String unsafeId = request.getParameter("pingTargetId");
+
+        String sql =
+           "SELECT * FROM ping_targets WHERE id = '" + unsafeId + "'";
+
+        try {
+           Connection conn = null;
+
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery(sql);
+        } catch (Exception e) {
+            log.error("SQL Injection test", e);
+        }
+
+        addMessage("Executed SQL: " + sql);
+        return LIST;
+    }
+
+    public String xssTest() {
+        String unsafeInput = getPingTargetId();
+        addMessage("<div>" + unsafeInput + "</div>");
+        return LIST;
+    }
+    public String getXssEcho() {
+        return getPingTargetId();
+    }
+
+    public String commandInjectionTest() {
+        try {
+            String unsafeInput = getPingTargetId();
+            // ★ OS コマンドインジェクション
+            Process p = Runtime.getRuntime().exec(
+                "/bin/sh -c \"ls " + unsafeInput + "\""
+            );
+
+            BufferedReader reader =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                addMessage(line);
+            }
+            reader.close();
+        } catch (Exception e) {
+            log.error("Command injection test error", e);
+        }
+        return LIST;
+    }
+
 }
