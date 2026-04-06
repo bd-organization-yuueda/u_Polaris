@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write               # Required to push changes or create fix branches
+  issues: write                 # Required to create issue
   pull-requests: write          # Required to add comments or create fix pull requests
   security-events: write        # Required to upload SARIF results to GitHub Security
 
@@ -43,7 +44,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
           ### Project's parameters
           polaris_application_name: U_test2
-          polaris_project_name: u_Polaris_manual  #${{ github.event.repository.name }}
+          polaris_project_name: ${{ github.event.repository.name }}_manual
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
           ### SCAN CONFIGURATION: Uncomment below to enable
           # polaris_waitForScan: true # Wait for scan completion before proceeding
