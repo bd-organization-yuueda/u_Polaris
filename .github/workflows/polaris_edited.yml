@@ -32,6 +32,7 @@ jobs:
           distribution: 'adopt'
           
       - name: Polaris Full Scan
+        id: polaris-full-scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: blackduck-inc/black-duck-security-scan@latest
         with:
@@ -91,7 +92,7 @@ jobs:
           # polaris_test_sast_location: 'local'
 
       - name: Polaris PR Scan
-        # id: polaris-pr-scan
+        id: polaris-pr-scan
         if: ${{ github.event_name == 'pull_request' }}
         uses: blackduck-inc/black-duck-security-scan@latest
         with:
