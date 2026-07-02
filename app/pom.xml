@@ -58,6 +58,7 @@ limitations under the License.
         <spring.security.version>5.6.0</spring.security.version>
         <!-- add  -->
         <junit.version>4.12</junit.version>
+        <spring.version>4.2.3.RELEASE</spring.version>
         <!-- add  -->
         <struts.version>2.5.28.1</struts.version>
         <velocity.version>2.3</velocity.version>
